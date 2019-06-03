@@ -1,0 +1,21 @@
+#Do not replace.
+#For help finding IDs, please use this link:
+#https://support.discordapp.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID-
+
+version: 1.0
+
+discord:
+  client_id: 0000000000000000
+  bot_token: 'insert_token_here'
+  log_channel_id: 0000000000000000
+
+users:
+  #MinecraftUserName: DiscordUserID
+  McIsTheLimit: 104376018222972928
+
+features:
+  auth_on_join: false
+  logging:
+    enabled: false
+    log_auth: false
+    bot_connected: false
