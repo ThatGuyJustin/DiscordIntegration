@@ -13,6 +13,10 @@ users:
   #MinecraftUserName: DiscordUserID
   McIsTheLimit: 104376018222972928
 
+server:
+  ip: dev.hypixel.net
+  port: 25565
+
 features:
   auth_on_join: false
   logging:

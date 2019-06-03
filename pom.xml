@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>io.github.ThatGuyJustin</groupId>
+    <groupId>io.github.thatguyjustin</groupId>
     <artifactId>DiscordIntegration</artifactId>
     <version>1.0</version>
     <build>
@@ -32,7 +32,7 @@
                                 <!-- relocated due to api usage -->
                                 <relocation>
                                     <pattern>net.dv8tion.jda</pattern>
-                                    <shadedPattern>github.ThatGuyJustin.DiscordIntegration.dependencies.jda</shadedPattern>
+                                    <shadedPattern>github.thatguyjustin.DiscordIntegration.dependencies.jda</shadedPattern>
                                 </relocation>
                             </relocations>
                             <minimizeJar>true</minimizeJar>
