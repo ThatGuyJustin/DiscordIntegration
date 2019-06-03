@@ -1,5 +1,6 @@
 package com.github.thatguyjustin;
 
+import com.github.thatguyjustin.listeners.DiscordListener;
 import com.github.thatguyjustin.otherUtils.Logger;
 import net.dv8tion.jda.api.AccountType;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -32,6 +33,7 @@ public class DiscordUtil {
                     .setAudioEnabled(false)
                     .setAutoReconnect(true)
                     .setBulkDeleteSplittingEnabled(false)
+                    .addEventListeners(new DiscordListener(this.pl))
                     .setToken(token)
                     .setContextEnabled(false)
                     .build().awaitReady();
