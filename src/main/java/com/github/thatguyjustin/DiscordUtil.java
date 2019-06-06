@@ -10,9 +10,12 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.internal.entities.UserImpl;
+import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import javax.security.auth.login.LoginException;
 import java.time.Instant;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class DiscordUtil {
@@ -48,7 +51,7 @@ public class DiscordUtil {
     private void logConnect() {
         TextChannel log_channel = this.bot.getTextChannelById(pl.getConfig().getLong("discord.log_channel_id"));
 
-        if(log_channel == null)
+        if (log_channel == null)
             return;
 
         String[] embed_desc = {
@@ -79,17 +82,27 @@ public class DiscordUtil {
         return msg;
     }
 
-    public Message sendPrivateMessage(User user, String msg) {
+    public Message sendPrivateMessage(User user, String msg, boolean isVerification, Player player) {
         if (!user.hasPrivateChannel()) user.openPrivateChannel().complete();
         AtomicReference<Message> toReturn = new AtomicReference<Message>(null);
         ((UserImpl) user).getPrivateChannel().sendMessage(msg).queue(e ->
         {
             toReturn.set(e);
-            if(toReturn.get() == null){
-                Logger.debug("msg is null");
-            }else{
-                Logger.debug(toReturn.get().toString());
+
+            if (isVerification) {
+//                e.addReaction("☑").queue();
+                pl.getVerificationCache().addVerificationMessage(user.getId(), e, user, this.pl, player);
+
+                pl.getVerificationCache().getVerificationMessage(user.getId()).addReaction("☑").queue();
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+
+                    }
+                }.runTaskLater(pl, 20L * TimeUnit.SECONDS.toSeconds(10));
+
             }
+
         });
         return toReturn.get();
     }

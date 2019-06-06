@@ -1,11 +1,8 @@
 package com.github.thatguyjustin.listeners;
 
 import com.github.thatguyjustin.DiscordIntegration;
-import com.github.thatguyjustin.otherUtils.Logger;
 import com.google.common.collect.Maps;
-import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.internal.entities.UserImpl;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -34,18 +31,9 @@ public class PluginListener implements Listener {
         // Kick them.
         String username = event.getPlayer().getName();
         if (userMap.containsKey(username)) {
+            event.getPlayer();
             User dm_user = pl.getDiscord().getBot().getUserById(userMap.get(username));
-            Message msgId = pl.getDiscord().sendPrivateMessage(dm_user, "Hey, just want to confirm that you logged into the server! Please click the reaction below within **10 seconds** to confirm!");
-            Logger.debug(String.valueOf(msgId));
-
-            assert dm_user != null;
-            if (!dm_user.hasPrivateChannel()) dm_user.openPrivateChannel().complete();
-
-           ((UserImpl)dm_user).getPrivateChannel().retrieveMessageById(msgId.getIdLong()).queue(msg ->{
-               msg.addReaction("☑").queue();
-            });
-
-
+            pl.getDiscord().sendPrivateMessage(dm_user, "Hey, just want to confirm that you logged into the server! Please click the reaction below within **10 seconds** to confirm!", true, event.getPlayer());
         }
     }
 

@@ -1,16 +1,22 @@
 package com.github.thatguyjustin;
 
+import com.github.thatguyjustin.cache.VerificationCache;
 import com.github.thatguyjustin.listeners.PluginListener;
 import com.github.thatguyjustin.otherUtils.Logger;
+import com.github.thatguyjustin.otherUtils.StringUtils;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class DiscordIntegration extends JavaPlugin {
 
    private DiscordUtil discord = new DiscordUtil(this);
 
+    private VerificationCache verificationCache = null;
+
     @Override
     public void onEnable()
     {
+        verificationCache = new VerificationCache();
         getServer().getPluginManager().registerEvents(new PluginListener(this), this);
         this.saveDefaultConfig();
         String token = this.getToken();
@@ -53,5 +59,14 @@ public class DiscordIntegration extends JavaPlugin {
 
     public DiscordUtil getDiscord(){
         return this.discord;
+    }
+
+    public VerificationCache getVerificationCache() {
+        return verificationCache;
+    }
+
+    public void kickPlayer(Player player)
+    {
+        player.kickPlayer(StringUtils.color("&4&lSorry, you did not verify in time. Please try again!"));
     }
 }
