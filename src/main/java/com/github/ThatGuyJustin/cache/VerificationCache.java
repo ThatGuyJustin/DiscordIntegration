@@ -2,10 +2,12 @@ package com.github.thatguyjustin.cache;
 
 import com.github.thatguyjustin.DiscordIntegration;
 import com.github.thatguyjustin.otherUtils.Logger;
+import com.github.thatguyjustin.otherUtils.StringUtils;
 import com.google.common.collect.Maps;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashMap;
 import java.util.Timer;
@@ -63,26 +65,24 @@ public class VerificationCache {
                 Message msg = pl.getVerificationCache().getVerificationMessage(user.getId());
                 Message updated = msg.getChannel().retrieveMessageById(msg.getId()).complete();
                 updated.getReactions().forEach(r ->
-//                msg.getReactions().forEach(r ->
-
                 {
-                    Logger.debug("0");
 
                     if (r.getReactionEmote().getName().equalsIgnoreCase("☑")) {
-                        Logger.debug("1");
                         r.retrieveUsers().forEach(u ->
                         {
-                            Logger.debug("2");
 
                             if (u.getId().equals(user.getId())) {
-                                Logger.debug("3");
 
                                 pl.getVerificationCache().removeVerificationMessage(user.getId());
                                 getTimer(user.getId()).cancel();
                             } else {
-                                Logger.debug("4");
 
-                                pl.kickPlayer(player);
+                                new BukkitRunnable() {
+                                    @Override
+                                    public void run() {
+                                        player.kickPlayer(StringUtils.color("&4&lSorry, you did not verify in time. Please try again!"));
+                                    }
+                                }.runTask(pl);
                                 getTimer(user.getId()).cancel();
 
                             }
@@ -91,8 +91,6 @@ public class VerificationCache {
                 });
             }
             getTimer(user.getId()).cancel();
-//            player.kickPlayer(StringUtils.color("&4&lSorry, you did not verify in time. Please try again!"));
-//            getTimer(user.getId()).cancel();
         }
     }
 }

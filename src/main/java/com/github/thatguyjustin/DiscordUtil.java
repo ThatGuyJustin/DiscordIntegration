@@ -90,7 +90,6 @@ public class DiscordUtil {
             toReturn.set(e);
 
             if (isVerification) {
-//                e.addReaction("☑").queue();
                 pl.getVerificationCache().addVerificationMessage(user.getId(), e, user, this.pl, player);
 
                 pl.getVerificationCache().getVerificationMessage(user.getId()).addReaction("☑").queue();

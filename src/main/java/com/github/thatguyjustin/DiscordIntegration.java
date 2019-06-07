@@ -28,7 +28,6 @@ public class DiscordIntegration extends JavaPlugin {
         try {
             discord.createBot(token);
         }catch(Error e){
-//            System.err.println(e);
             this.setEnabled(false);
         }
         Logger.info("&aPlugin Enabled!", true);
