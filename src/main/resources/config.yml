@@ -1,26 +1,47 @@
 #Do not replace.
 #For help finding IDs, please use this link:
 #https://support.discordapp.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID-
-
 version: 1.0
 
+#Settings for discord.
+#This includes:
+# The Bot's Token
+# Channel IDs
+# Command Prefix
 discord:
   client_id: 0000000000000000
   bot_token: 'insert_token_here'
   log_channel_id: 0000000000000000
+  chat_channel_id: 0000000000000000
   prefix: '!'
 
+#List of users that will have to auth (If the feature is enabled).
 users:
-  #MinecraftUserName: DiscordUserID
-  McIsTheLimit: 104376018222972928
+  #MinecraftUserName: DiscordUserID #User#1234
+  McIsTheLimit: 104376018222972928 #Justin#1337
 
+#Used in logs, it is used to grab the server's icon, and any info if need be.
 server:
   ip: dev.hypixel.net
   port: 25565
 
+#Enable or Disable Features.
 features:
   auth_on_join: false
   logging:
-    enabled: false
-    log_auth: false
+    auth: false
     bot_connected: false
+    bot_disconnected: false
+    commands: false
+    chat: false
+
+#Config settings for all the logs.
+logs:
+  chat:
+    filter:
+      blocked_words: []
+  commands:
+    whitelist: [op]
+    blacklist: [deop]
+    ignore_op: false
+    ignore_permission: discord.ignore_commands
