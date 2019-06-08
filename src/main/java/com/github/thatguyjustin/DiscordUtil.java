@@ -2,16 +2,22 @@ package com.github.thatguyjustin;
 
 import com.github.thatguyjustin.listeners.DiscordListener;
 import com.github.thatguyjustin.otherUtils.Logger;
+import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.JsonNode;
+import com.mashape.unirest.http.Unirest;
+import com.mashape.unirest.http.exceptions.UnirestException;
 import net.dv8tion.jda.api.AccountType;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.internal.entities.UserImpl;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.json.JSONObject;
 
 import javax.security.auth.login.LoginException;
 import java.time.Instant;
@@ -73,6 +79,30 @@ public class DiscordUtil {
 
         log_channel.sendMessage(embed.build()).queue();
 
+    }
+
+    public static String getColor(Member member)
+    {
+        String temp = "f";
+        String discordColor;
+        if((Integer) member.getColorRaw() != null)
+            discordColor = Integer.toHexString(member.getColor().getRGB() & 0xffffff);
+
+        else
+            discordColor = "ffffff";
+
+        try {
+            JSONObject hex = new JSONObject();
+            hex.append("hex", discordColor);
+            HttpResponse<JsonNode> response = Unirest.post("https://assists.aperturebot.science/minecraft/colorconvert.php")
+                    .header("accept", "application/json")
+                    .body(hex)
+                    .asJson();
+            temp= response.getBody().getObject().get("chat_color").toString();
+        } catch (UnirestException e) {
+            e.printStackTrace();
+        }
+        return temp;
     }
 
     public Message sendPrivateMessage(User user, Message msg) {

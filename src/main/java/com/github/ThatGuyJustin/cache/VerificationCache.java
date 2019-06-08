@@ -1,7 +1,6 @@
 package com.github.thatguyjustin.cache;
 
 import com.github.thatguyjustin.DiscordIntegration;
-import com.github.thatguyjustin.otherUtils.Logger;
 import com.github.thatguyjustin.otherUtils.StringUtils;
 import com.google.common.collect.Maps;
 import net.dv8tion.jda.api.entities.Message;
@@ -59,9 +58,7 @@ public class VerificationCache {
 
         @Override
         public void run() {
-            Logger.debug("-2");
             if (pl.getVerificationCache().hasVerificationMessage(user.getId())) {
-                Logger.debug("-1");
                 Message msg = pl.getVerificationCache().getVerificationMessage(user.getId());
                 Message updated = msg.getChannel().retrieveMessageById(msg.getId()).complete();
                 updated.getReactions().forEach(r ->

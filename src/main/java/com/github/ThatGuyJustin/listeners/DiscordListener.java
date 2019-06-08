@@ -1,11 +1,14 @@
 package com.github.thatguyjustin.listeners;
 
 import com.github.thatguyjustin.DiscordIntegration;
+import com.github.thatguyjustin.DiscordUtil;
+import com.github.thatguyjustin.otherUtils.StringUtils;
 import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import org.bukkit.Bukkit;
 
 public class DiscordListener extends ListenerAdapter {
 
@@ -30,12 +33,21 @@ public class DiscordListener extends ListenerAdapter {
     @Override
     public void onMessageReceived(MessageReceivedEvent event)
     {
-        // Return if:
-        // * Prefix is null
-        // * Message doesn't start with prefix
-        // * If it's the chat log channel (Commands auto disabled in that channel)
-        if(pl.getConfig().getString("discord.prefix") == null || !event.getMessage().getContentRaw().startsWith(pl.getConfig().getString("discord.prefix")) || event.getChannel().getId().equals(pl.getConfig().getString("discord.chat_channel_id")))
+        if(!event.isFromGuild() || !event.getAuthor().getId().equals("104376018222972928"))
             return;
-    }
 
+        if(!pl.getConfig().getBoolean("features.discord_to_chat.enabled"))
+            return;
+
+        String chatColor = DiscordUtil.getColor(event.getMember());
+
+        if(!pl.getConfig().getBoolean("features.discord_to_chat.use_hoist_name"))
+        {
+            String name = event.getAuthor().getName();
+            if(pl.getConfig().getBoolean("features.discord_to_chat.use_nickname"))
+                name = event.getMember().getNickname();
+            String message = StringUtils.color(String.format("&8[&9Discord&8]&r&%3$s %1$s &8»&7 %2$s", name, event.getMessage().getContentStripped(), chatColor));
+            Bukkit.broadcastMessage(message);
+        }
+    }
 }

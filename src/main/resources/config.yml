@@ -33,7 +33,11 @@ features:
     bot_connected: false
     bot_disconnected: false
     commands: false
-    chat: false
+  discord_to_chat:
+    enabled: false
+    use_hoist_name: true
+    show_color: true
+    use_nickname: false
 
 #Config settings for all the logs.
 logs:
