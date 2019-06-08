@@ -1,0 +1,26 @@
+
+version: 2
+jobs:
+  build:
+    docker:
+      - image: maven
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+
+      - run:
+          name: build maven project
+          command: |
+            mvn clean install
+
+      - run:
+          name: move binary
+          command: |
+            mkdir dists
+            mv target/DiscordIntegration-*.jar dists
+
+      - store_artifacts:
+          path: dists
+          destination: distribution
