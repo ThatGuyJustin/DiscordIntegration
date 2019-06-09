@@ -3,6 +3,10 @@
 #https://support.discordapp.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID-
 version: 1.0
 
+#Used internally, set back to true if you'd like to
+#reset your messages.yml file.
+firstRun: true
+
 #Settings for discord.
 #This includes:
 # The Bot's Token
@@ -37,6 +41,11 @@ features:
     enabled: false
     use_hoist_name: true
     show_color: true
+    use_nickname: false
+  chat_to_discord:
+    enabled: false
+    show_prefix: true
+    show_suffix: false
     use_nickname: false
 
 #Config settings for all the logs.

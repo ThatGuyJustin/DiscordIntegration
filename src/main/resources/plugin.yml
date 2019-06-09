@@ -5,4 +5,9 @@ authors:
   - McIsTheLimit
   - GrimReaper52498
 website: https://aperturebot.science
+depend:
+  - Vault
 description: "A plugin used to bridge Discord and Minecraft in more ways than just chat. It allows for server management and logging, and more."
+commands:
+  direload:
+    description: "Reloads the Plugin"

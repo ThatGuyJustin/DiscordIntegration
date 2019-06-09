@@ -1,62 +1,86 @@
 package com.github.thatguyjustin;
 
 import com.github.thatguyjustin.cache.VerificationCache;
+import com.github.thatguyjustin.commands.ReloadCommand;
+import com.github.thatguyjustin.config.Config;
+import com.github.thatguyjustin.config.Messages;
 import com.github.thatguyjustin.listeners.PluginListener;
 import com.github.thatguyjustin.otherUtils.Logger;
-import com.github.thatguyjustin.otherUtils.StringUtils;
-import org.bukkit.entity.Player;
+import net.milkbowl.vault.chat.Chat;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class DiscordIntegration extends JavaPlugin {
 
-   private DiscordUtil discord = new DiscordUtil(this);
+    private DiscordUtil discord = new DiscordUtil(this);
+    private static DiscordIntegration instance = null;
+    private static Chat chat = null;
 
     private VerificationCache verificationCache = null;
 
     @Override
-    public void onEnable()
-    {
+    public void onEnable() {
+        instance = this;
+        if (!setupChat()) {
+            Logger.error("&cVault not found. Disabling plugin.", true);
+            getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
         verificationCache = new VerificationCache();
         getServer().getPluginManager().registerEvents(new PluginListener(this), this);
+        getCommand("direload").setExecutor(new ReloadCommand());
         this.saveDefaultConfig();
         String token = this.getToken();
-        if(token == null)
-        {
+        if (token == null) {
             Logger.error("Unable to correctly get the bot's token. Please check that the token is correct, and reload the plugin.", true);
-            this.setEnabled(false);
+            getServer().getPluginManager().disablePlugin(this);
         }
         try {
             discord.createBot(token);
-        }catch(Error e){
-            this.setEnabled(false);
+        } catch (Error e) {
+            getServer().getPluginManager().disablePlugin(this);
         }
+
+        if (getConfig().getBoolean("firstRun")) {
+
+            FileConfiguration messageConfig = Config.getInstance().getConfig(getDataFolder(), "messages");
+            for (Messages msg : Messages.values()) {
+                messageConfig.set(msg.getPath(), msg.getDefaultMessage());
+            }
+            Config.getInstance().saveConfig(getDataFolder(), "messages");
+            getConfig().set("firstRun", false);
+        }
+
+
         Logger.info("&aPlugin Enabled!", true);
     }
 
-    private String getToken()
-    {
+    private String getToken() {
         String temp = this.getConfig().getString("discord.bot_token");
-        if(temp == null)
+        if (temp == null)
             return null;
-        if(temp.isEmpty())
+        if (temp.isEmpty())
             return null;
         return temp;
     }
 
     @Override
-    public void onDisable(){
-        if(this.discord.getBot() != null)
-        {
+    public void onDisable() {
+
+        saveDefaultConfig();
+
+        if (this.discord.getBot() != null) {
             this.discord.getBot().shutdown();
             this.discord.setNull();
         }
-        if(this.discord.getBot() == null)
+        if (this.discord.getBot() == null)
             Logger.info("&6Bot: &cBot Shutdown!", true);
 
         Logger.info("&cPlugin Disabled!", true);
     }
 
-    public DiscordUtil getDiscord(){
+    public DiscordUtil getDiscord() {
         return this.discord;
     }
 
@@ -64,8 +88,17 @@ public class DiscordIntegration extends JavaPlugin {
         return verificationCache;
     }
 
-    public void kickPlayer(Player player)
-    {
-        player.kickPlayer(StringUtils.color("&4&lSorry, you did not verify in time. Please try again!"));
+    private boolean setupChat() {
+        RegisteredServiceProvider<Chat> rsp = getServer().getServicesManager().getRegistration(Chat.class);
+        chat = rsp.getProvider();
+        return chat != null;
+    }
+
+    public Chat getChat() {
+        return chat;
+    }
+
+    public static DiscordIntegration getInstance() {
+        return instance;
     }
 }
