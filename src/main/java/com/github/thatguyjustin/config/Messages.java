@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 
 public enum Messages {
     EXAMPLE_MESSAGE("path.to.message", "DefaultMessage"),
-    DISCORD_TO_CHAT("minecraft.chat.format", "&8[&9Discord&8]&r%MemberColor%%MemberDisplayRole% &7| %roleColor%%MemberNick% &8» &f%Message%"),
+    DISCORD_TO_CHAT("minecraft.chat.format", "&8[&9Discord&8]&r%MemberColor%%MemberDisplayRole% &7| %MemberColor%%MemberNick% &8» &f%Message%"),
     MINECRAFT_AUTH_TIMEOUT("minecraft.auth.timeout", "%PluginPrefix%&4&lSorry, you did not verify in time. Please try again!"),
     PLUGIN_PREFIX("plugin_prefix", "&7&l[&b&lDiscord&f&lIntegration&7&l] &r"),
     PLUGIN_RELOADED("plugin_reload", "%PluginPrefix% &aPlugin has been reloaded!");

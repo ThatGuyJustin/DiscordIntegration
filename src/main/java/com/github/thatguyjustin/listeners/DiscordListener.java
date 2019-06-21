@@ -1,7 +1,7 @@
 package com.github.thatguyjustin.listeners;
 
 import com.github.thatguyjustin.DiscordIntegration;
-import com.github.thatguyjustin.DiscordUtil;
+import com.github.thatguyjustin.config.Messages;
 import com.github.thatguyjustin.otherUtils.StringUtils;
 import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.entities.Message;
@@ -34,20 +34,13 @@ public class DiscordListener extends ListenerAdapter {
     public void onMessageReceived(MessageReceivedEvent event) {
 
 
-        if (!event.isFromGuild() || !event.getAuthor().getId().equals("104376018222972928"))
+        if (!event.isFromGuild() || !event.getAuthor().isBot() || !event.getAuthor().getId().equals("104376018222972928"))
             return;
 
-        if (!pl.getConfig().getBoolean("features.discord_to_chat.enabled"))
+        if (!pl.getConfig().getBoolean("features.discord_to_chat"))
             return;
 
-        String chatColor = DiscordUtil.getColor(event.getMember());
-
-        if (!pl.getConfig().getBoolean("features.discord_to_chat.use_hoist_name")) {
-            String name = event.getAuthor().getName();
-            if (pl.getConfig().getBoolean("features.discord_to_chat.use_nickname"))
-                name = event.getMember().getNickname();
-            String message = StringUtils.color(String.format("&8[&9Discord&8]&r&%3$s %1$s &8»&7 %2$s", name, event.getMessage().getContentStripped(), chatColor));
-            Bukkit.broadcastMessage(message);
-        }
+        String message = StringUtils.color(Messages.DISCORD_TO_CHAT.replaceDiscordVariables(event.getAuthor(), null, event.getMember(), null, event.getMessage()));
+        Bukkit.broadcastMessage(message);
     }
 }

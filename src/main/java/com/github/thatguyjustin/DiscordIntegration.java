@@ -7,6 +7,7 @@ import com.github.thatguyjustin.config.Messages;
 import com.github.thatguyjustin.listeners.PluginListener;
 import com.github.thatguyjustin.otherUtils.Logger;
 import net.milkbowl.vault.chat.Chat;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -22,8 +23,13 @@ public class DiscordIntegration extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
-        if (!setupChat()) {
+        if(Bukkit.getPluginManager().getPlugin("Vault") == null)
+        {
             Logger.error("&cVault not found. Disabling plugin.", true);
+            getServer().getPluginManager().disablePlugin(this);
+        }
+        if (!setupChat()) {
+            Logger.error("&cCould not hook into chat, please make sure there is a permissions plugin installed.", true);
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
@@ -90,6 +96,8 @@ public class DiscordIntegration extends JavaPlugin {
 
     private boolean setupChat() {
         RegisteredServiceProvider<Chat> rsp = getServer().getServicesManager().getRegistration(Chat.class);
+        if(rsp == null)
+            return false;
         chat = rsp.getProvider();
         return chat != null;
     }

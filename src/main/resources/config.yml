@@ -37,16 +37,8 @@ features:
     bot_connected: false
     bot_disconnected: false
     commands: false
-  discord_to_chat:
-    enabled: false
-    use_hoist_name: true
-    show_color: true
-    use_nickname: false
-  chat_to_discord:
-    enabled: false
-    show_prefix: true
-    show_suffix: false
-    use_nickname: false
+  discord_to_chat: false
+  chat_to_discord: false
 
 #Config settings for all the logs.
 logs:

@@ -102,7 +102,7 @@ public class DiscordUtil {
         } catch (UnirestException e) {
             e.printStackTrace();
         }
-        return temp;
+        return "&" + temp;
     }
 
     public Message sendPrivateMessage(User user, Message msg) {

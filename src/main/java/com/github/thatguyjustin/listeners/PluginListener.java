@@ -56,7 +56,7 @@ public class PluginListener implements Listener {
     @EventHandler
     public void onChat(AsyncPlayerChatEvent event)
     {
-        if(pl.getConfig().getString("discord.chat_channel_id").isEmpty() || !pl.getConfig().getBoolean("features.chat_to_discord.enabled"))
+        if(pl.getConfig().getString("discord.chat_channel_id").isEmpty() || !pl.getConfig().getBoolean("features.chat_to_discord"))
             return;
 
         String message = event.getMessage();
